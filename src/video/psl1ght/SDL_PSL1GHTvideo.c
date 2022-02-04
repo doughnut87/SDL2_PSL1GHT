@@ -54,12 +54,6 @@ static void initializeGPU(SDL_DeviceData *devdata);
 
 /* PSL1GHT driver bootstrap functions */
 
-static int
-PSL1GHT_Available(void)
-{
-    return (1);
-}
-
 static void
 PSL1GHT_DeleteDevice(SDL_VideoDevice *device)
 {
@@ -269,7 +263,7 @@ PSL1GHT_CreateDevice(int devindex)
 
 VideoBootStrap PSL1GHT_bootstrap = {
     PSL1GHTVID_DRIVER_NAME, "SDL psl1ght video driver",
-    PSL1GHT_Available, PSL1GHT_CreateDevice
+    PSL1GHT_CreateDevice
 };
 
 /* vi: set ts=4 sw=4 expandtab: */

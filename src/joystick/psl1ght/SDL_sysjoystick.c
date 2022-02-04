@@ -175,6 +175,30 @@ SDL_SYS_JoystickRumble(SDL_Joystick * joystick, Uint16 low_frequency_rumble, Uin
     return SDL_Unsupported();
 }
 
+static int
+SDL_SYS_JoystickRumbleTriggers(SDL_Joystick *joystick, Uint16 left_rumble, Uint16 right_rumble)
+{
+    return SDL_Unsupported();
+}
+
+static SDL_bool
+SDL_SYS_JoystickHasLED(SDL_Joystick *joystick)
+{
+    return SDL_FALSE;
+}
+
+static int
+SDL_SYS_JoystickSetLED(SDL_Joystick *joystick, Uint8 red, Uint8 green, Uint8 blue)
+{
+    return SDL_Unsupported();
+}
+
+static int
+SDL_SYS_JoystickSetSensorsEnabled(SDL_Joystick *joystick, SDL_bool enabled)
+{
+    return SDL_Unsupported();
+}
+
 #define CheckPSL1GHTAxis(btn, bnum) \
     if (new_pad_data.btn != joystick->hwdata->old_pad_data.btn) {\
         SDL_PrivateJoystickAxis( joystick, (bnum), ((new_pad_data.btn-0x80) << 8) | new_pad_data.btn); \
@@ -270,6 +294,10 @@ SDL_JoystickDriver SDL_PSL1GHT_JoystickDriver =
     SDL_SYS_JoystickGetDeviceInstanceID,
     SDL_SYS_JoystickOpen,
     SDL_SYS_JoystickRumble,
+    SDL_SYS_JoystickRumbleTriggers,
+    SDL_SYS_JoystickHasLED,
+    SDL_SYS_JoystickSetLED,
+    SDL_SYS_JoystickSetSensorsEnabled,
     SDL_SYS_JoystickUpdate,
     SDL_SYS_JoystickClose,
     SDL_SYS_JoystickQuit,
