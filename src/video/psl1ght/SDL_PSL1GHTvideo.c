@@ -185,12 +185,6 @@ PSL1GHT_RestoreWindow(_THIS, SDL_Window *window)
 }
 
 void
-PSL1GHT_SetWindowGrab(_THIS, SDL_Window *window, SDL_bool grabbed)
-{
-
-}
-
-void
 PSL1GHT_DestroyWindow(_THIS, SDL_Window *window)
 {
 }
@@ -247,7 +241,6 @@ PSL1GHT_CreateDevice(int devindex)
     device->MaximizeWindow = PSL1GHT_MaximizeWindow;
     device->MinimizeWindow = PSL1GHT_MinimizeWindow;
     device->RestoreWindow = PSL1GHT_RestoreWindow;
-    device->SetWindowGrab = PSL1GHT_SetWindowGrab;
     device->DestroyWindow = PSL1GHT_DestroyWindow;
     device->HasScreenKeyboardSupport = PSL1GHT_HasScreenKeyboardSupport;
     device->ShowScreenKeyboard = PSL1GHT_ShowScreenKeyboard;
