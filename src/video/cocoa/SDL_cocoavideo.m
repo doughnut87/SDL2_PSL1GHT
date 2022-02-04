@@ -28,19 +28,12 @@
 #include "SDL_cocoashape.h"
 #include "SDL_cocoavulkan.h"
 #include "SDL_cocoametalview.h"
-#include "SDL_assert.h"
 
 /* Initialization/Query functions */
 static int Cocoa_VideoInit(_THIS);
 static void Cocoa_VideoQuit(_THIS);
 
 /* Cocoa driver bootstrap functions */
-
-static int
-Cocoa_Available(void)
-{
-    return (1);
-}
 
 static void
 Cocoa_DeleteDevice(SDL_VideoDevice * device)
@@ -165,7 +158,7 @@ Cocoa_CreateDevice(int devindex)
 
 VideoBootStrap COCOA_bootstrap = {
     "cocoa", "SDL Cocoa video driver",
-    Cocoa_Available, Cocoa_CreateDevice
+    Cocoa_CreateDevice
 };
 
 

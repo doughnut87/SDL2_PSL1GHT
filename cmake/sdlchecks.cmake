@@ -973,8 +973,8 @@ macro(CheckUSBHID)
         #include <usb.h>
         #endif
         #ifdef __DragonFly__
-        # include <bus/usb/usb.h>
-        # include <bus/usb/usbhid.h>
+        # include <bus/u4b/usb.h>
+        # include <bus/u4b/usbhid.h>
         #else
         # include <dev/usb/usb.h>
         # include <dev/usb/usbhid.h>
@@ -999,8 +999,8 @@ macro(CheckUSBHID)
           #include <usb.h>
           #endif
           #ifdef __DragonFly__
-          # include <bus/usb/usb.h>
-          # include <bus/usb/usbhid.h>
+          # include <bus/u4b/usb.h>
+          # include <bus/u4b/usbhid.h>
           #else
           # include <dev/usb/usb.h>
           # include <dev/usb/usbhid.h>
@@ -1027,8 +1027,8 @@ macro(CheckUSBHID)
           #include <usb.h>
           #endif
           #ifdef __DragonFly__
-          #include <bus/usb/usb.h>
-          #include <bus/usb/usbhid.h>
+          #include <bus/u4b/usb.h>
+          #include <bus/u4b/usbhid.h>
           #else
           #include <dev/usb/usb.h>
           #include <dev/usb/usbhid.h>
@@ -1077,7 +1077,7 @@ macro(CheckHIDAPI)
       set(HAVE_HIDAPI TRUE)
     else()
       set(HAVE_HIDAPI FALSE)
-      pkg_check_modules(LIBUSB libusb)
+      pkg_check_modules(LIBUSB libusb-1.0)
       if (LIBUSB_FOUND)
         check_include_file(libusb.h HAVE_LIBUSB_H ${LIBUSB_CFLAGS})
         if (HAVE_LIBUSB_H)
@@ -1163,7 +1163,8 @@ macro(CheckKMSDRM)
       set(HAVE_SDL_VIDEO TRUE)
 
       file(GLOB KMSDRM_SOURCES ${SDL2_SOURCE_DIR}/src/video/kmsdrm/*.c)
-      set(SOURCE_FILES ${SOURCE_FILES} ${KMSDRM_SOURCES})
+      file(GLOB KMSDRM_LEGACY_SOURCES ${SDL2_SOURCE_DIR}/src/video/kmsdrm_legacy/*.c)
+      set(SOURCE_FILES ${SOURCE_FILES} ${KMSDRM_SOURCES} ${KMSDRM_LEGACY_SOURCES})
 
       list(APPEND EXTRA_CFLAGS ${KMSDRM_CFLAGS})
 

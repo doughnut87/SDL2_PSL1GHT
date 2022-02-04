@@ -24,12 +24,12 @@
  * Thanks to Alex Szpakowski, @slime73 on GitHub, for his gist showing
  * how to add a CAMetalLayer backed view.
  */
+#include "../../SDL_internal.h"
 
 #import "SDL_cocoametalview.h"
 
 #if SDL_VIDEO_DRIVER_COCOA && (SDL_VIDEO_VULKAN || SDL_VIDEO_METAL)
 
-#include "SDL_assert.h"
 #include "SDL_events.h"
 
 static int SDLCALL
@@ -121,6 +121,10 @@ SDL_MetalViewEventWatch(void *userdata, SDL_Event *event)
 
     metalLayer.contentsScale = backingSize.height / size.height;
     metalLayer.drawableSize = NSSizeToCGSize(backingSize);
+}
+
+- (NSView *)hitTest:(NSPoint)point {
+    return nil;
 }
 
 @end

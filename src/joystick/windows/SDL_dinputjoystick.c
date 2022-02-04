@@ -229,10 +229,6 @@ const DIDATAFORMAT SDL_c_dfDIJoystick2 = {
 static int
 SetDIerror(const char *function, HRESULT code)
 {
-    /*
-    return SDL_SetError("%s() [%s]: %s", function,
-    DXGetErrorString9A(code), DXGetErrorDescription9A(code));
-    */
     return SDL_SetError("%s() DirectX error 0x%8.8lx", function, code);
 }
 
@@ -423,7 +419,7 @@ SDL_IsXInputDevice(const WCHAR *name, const GUID* pGuidProductFromDirectInput)
 
     for (i = 0; i < SDL_RawDevListCount; i++) {
         RID_DEVICE_INFO rdi;
-        char devName[128];
+        char devName[MAX_PATH];
         UINT rdiSize = sizeof(rdi);
         UINT nameSize = SDL_arraysize(devName);
 
@@ -518,11 +514,15 @@ SDL_DINPUT_JoystickInit(void)
     /* Because we used CoCreateInstance, we need to Initialize it, first. */
     instance = GetModuleHandle(NULL);
     if (instance == NULL) {
+        IDirectInput8_Release(dinput);
+        dinput = NULL;
         return SDL_SetError("GetModuleHandle() failed with error code %lu.", GetLastError());
     }
     result = IDirectInput8_Initialize(dinput, instance, DIRECTINPUT_VERSION);
 
     if (FAILED(result)) {
+        IDirectInput8_Release(dinput);
+        dinput = NULL;
         return SetDIerror("IDirectInput::Initialize", result);
     }
     return 0;
@@ -605,8 +605,8 @@ EnumJoysticksCallback(const DIDEVICEINSTANCE * pdidInstance, VOID * pContext)
                 pPrevJoystick->pNext = pNewJoystick->pNext;
             }
 
-            // Update with new guid/etc, if it has changed
-            pNewJoystick->dxdevice = *pdidInstance;
+            /* Update with new guid/etc, if it has changed */
+            SDL_memcpy(&pNewJoystick->dxdevice, pdidInstance, sizeof(DIDEVICEINSTANCE));
 
             pNewJoystick->pNext = SYS_Joystick;
             SYS_Joystick = pNewJoystick;
@@ -674,7 +674,7 @@ EnumJoysticksCallback(const DIDEVICEINSTANCE * pdidInstance, VOID * pContext)
 #endif
 
 #ifdef SDL_JOYSTICK_RAWINPUT
-    if (RAWINPUT_IsDevicePresent(vendor, product, 0)) {
+    if (RAWINPUT_IsDevicePresent(vendor, product, 0, pNewJoystick->joystickname)) {
         /* The RAWINPUT driver is taking care of this device */
         SDL_free(pNewJoystick);
         return DIENUM_CONTINUE;
@@ -729,6 +729,10 @@ SDL_bool
 SDL_DINPUT_JoystickPresent(Uint16 vendor, Uint16 product, Uint16 version)
 {
     EnumJoystickPresentData data;
+
+    if (dinput == NULL) {
+        return SDL_FALSE;
+    }
 
     data.vendor = vendor;
     data.product = product;

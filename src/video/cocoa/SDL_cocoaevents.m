@@ -26,12 +26,14 @@
 
 #include "SDL_cocoavideo.h"
 #include "../../events/SDL_events_c.h"
-#include "SDL_assert.h"
 #include "SDL_hints.h"
 
 /* This define was added in the 10.9 SDK. */
 #ifndef kIOPMAssertPreventUserIdleDisplaySleep
 #define kIOPMAssertPreventUserIdleDisplaySleep kIOPMAssertionTypePreventUserIdleDisplaySleep
+#endif
+#ifndef NSAppKitVersionNumber10_8
+#define NSAppKitVersionNumber10_8 1187
 #endif
 
 @interface SDLApplication : NSApplication
@@ -306,7 +308,10 @@ LoadMainMenuNibIfAvailable(void)
     NSDictionary *infoDict;
     NSString *mainNibFileName;
     bool success = false;
-    
+
+    if (floor(NSAppKitVersionNumber) < NSAppKitVersionNumber10_8) {
+        return false;
+    }
     infoDict = [[NSBundle mainBundle] infoDictionary];
     if (infoDict) {
         mainNibFileName = [infoDict valueForKey:@"NSMainNibFile"];

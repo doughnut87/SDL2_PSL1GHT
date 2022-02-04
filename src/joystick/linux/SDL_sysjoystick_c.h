@@ -58,11 +58,19 @@ struct joystick_hwdata
 
     struct axis_correct
     {
-        int used;
+        SDL_bool use_deadzones;
+
+        /* Deadzone coefficients */
         int coef[3];
+
+        /* Raw coordinate scale */
+        int minimum;
+        int maximum;
+        float scale;
     } abs_correct[ABS_MAX];
 
-    int fresh;
+    SDL_bool fresh;
+    SDL_bool recovering_from_dropped;
 
     /* Steam Controller support */
     SDL_bool m_bSteamController;

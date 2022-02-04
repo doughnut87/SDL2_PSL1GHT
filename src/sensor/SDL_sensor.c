@@ -26,7 +26,6 @@
 #include "SDL_atomic.h"
 #include "SDL_events.h"
 #include "SDL_syssensor.h"
-#include "SDL_assert.h"
 
 #if !SDL_EVENTS_DISABLED
 #include "../events/SDL_events_c.h"
@@ -177,7 +176,7 @@ SDL_SensorGetDeviceType(int device_index)
     return type;
 }
 
-SDL_SensorType
+int
 SDL_SensorGetDeviceNonPortableType(int device_index)
 {
     SDL_SensorDriver *driver;
