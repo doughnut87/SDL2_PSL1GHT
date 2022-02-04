@@ -59,8 +59,8 @@ Uint32 SDL_GetTicks(void)
     Uint32 ticks;
 
     gettimeofday(&now, NULL);
-    ticks=(now.tv_sec-start.tv_sec)*1000+(now.tv_usec-start.tv_usec)/1000;
-    return(ticks);
+    ticks = (now.tv_sec - start.tv_sec) * 1000 + (now.tv_usec - start.tv_usec) / 1000;
+    return ticks;
 }
 
 Uint64

@@ -27,26 +27,26 @@
 
 #include <audio/audio.h>
 /* Hidden "this" pointer for the audio functions */
-#define _THIS	SDL_AudioDevice *this
+#define _THIS SDL_AudioDevice *this
 
 struct SDL_PrivateAudioData
 {
     //:TransferSoundData *sound;
     /* The file descriptor for the audio device */
 
-	audioPortParam params;
-	audioPortConfig config;
-	u32 portNum;
-	u32 last_filled_buf;
-	sys_event_queue_t snd_queue; // Queue identifier
-	u64	snd_queue_key; // Queue Key
+    audioPortParam params;
+    audioPortConfig config;
+    u32 portNum;
+    u32 last_filled_buf;
+    sys_event_queue_t snd_queue; // Queue identifier
+    u64 snd_queue_key; // Queue Key
 };
 
 #define _params this->hidden->params
 #define _config this->hidden->config
 #define _portNum this->hidden->portNum
 #define _last_filled_buf this->hidden->last_filled_buf
-#define _snd_queue  this->hidden->snd_queue 
+#define _snd_queue  this->hidden->snd_queue
 #define _snd_queue_key this->hidden->snd_queue_key
 
 /* vi: set ts=4 sw=4 expandtab: */

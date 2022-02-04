@@ -48,22 +48,22 @@ static void eventHandle(u64 status, u64 param, void * userdata) {
 
     // Process event
     if (status == SYSUTIL_EXIT_GAME) {
-	    deprintf(1, "Quit game requested\n");
-	    SDL_SendQuit();
+        deprintf(1, "Quit game requested\n");
+        SDL_SendQuit();
     } else if(status == SYSUTIL_MENU_OPEN) {
-	    // XMB opened
-	    if (window) {
-	        SDL_SendWindowEvent(window, SDL_WINDOWEVENT_LEAVE, 0, 0);
-	    }
+        // XMB opened
+        if (window) {
+            SDL_SendWindowEvent(window, SDL_WINDOWEVENT_LEAVE, 0, 0);
+        }
     } else if(status == SYSUTIL_MENU_CLOSE) {
-		// XMB closed
-	    if (window) {
-	        SDL_SendWindowEvent(window, SDL_WINDOWEVENT_ENTER, 0, 0);
-	    }
+        // XMB closed
+        if (window) {
+            SDL_SendWindowEvent(window, SDL_WINDOWEVENT_ENTER, 0, 0);
+        }
     } else if(status == SYSUTIL_DRAW_BEGIN) {
     } else if(status == SYSUTIL_DRAW_END) {
     } else {
-	    deprintf(1, "Unhandled event: %08llX\n", (unsigned long long int)status);
+        deprintf(1, "Unhandled event: %08llX\n", (unsigned long long int)status);
     }
 }
 
@@ -74,7 +74,6 @@ PSL1GHT_PumpEvents(_THIS)
     PSL1GHT_PumpKeyboard(_this);
     PSL1GHT_PumpMouse(_this);
 }
-
 
 void
 PSL1GHT_InitSysEvent(_THIS)

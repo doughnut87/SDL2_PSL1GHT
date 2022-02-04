@@ -38,7 +38,6 @@
 #include "SDL_PSL1GHTevents_c.h"
 #include "SDL_PSL1GHTmodes_c.h"
 
-
 #include <malloc.h>
 #include <assert.h>
 
@@ -51,7 +50,7 @@ static int PSL1GHT_VideoInit(_THIS);
 static void PSL1GHT_VideoQuit(_THIS);
 
 /* PS3GUI init functions : */
-static void initializeGPU(SDL_DeviceData * devdata);
+static void initializeGPU(SDL_DeviceData *devdata);
 
 /* PSL1GHT driver bootstrap functions */
 
@@ -62,7 +61,7 @@ PSL1GHT_Available(void)
 }
 
 static void
-PSL1GHT_DeleteDevice(SDL_VideoDevice * device)
+PSL1GHT_DeleteDevice(SDL_VideoDevice *device)
 {
     deprintf (1, "PSL1GHT_DeleteDevice( %p)\n", device);
     SDL_free(device);
@@ -73,12 +72,12 @@ PSL1GHT_VideoInit(_THIS)
 {
     SDL_DeviceData *devdata = NULL;
 
-    devdata = (SDL_DeviceData*) SDL_calloc(1, sizeof(SDL_DeviceData));
-    if (devdata == NULL) { 
-        /* memory allocation problem */  
+    devdata = (SDL_DeviceData *) SDL_calloc(1, sizeof(SDL_DeviceData));
+    if (devdata == NULL) {
+        /* memory allocation problem */
         SDL_OutOfMemory();
         return -1;
-    } 
+    }
 
     _this->driverdata = devdata;
 
@@ -99,29 +98,29 @@ PSL1GHT_VideoQuit(_THIS)
     deprintf (1, "PSL1GHT_VideoQuit()\n");
     PSL1GHT_QuitModes(_this);
     PSL1GHT_QuitSysEvent(_this);
-    SDL_free( _this->driverdata);
-
+    SDL_free(_this->driverdata);
 }
 
-void initializeGPU( SDL_DeviceData * devdata)
+void
+initializeGPU(SDL_DeviceData *devdata)
 {
     deprintf (1, "initializeGPU()\n");
-   // Allocate a 1Mb buffer, alligned to a 1Mb boundary to be our shared IO memory with the RSX.
-    void *host_addr = memalign(1024*1024, 1024*1024);
+    // Allocate a 1Mb buffer, alligned to a 1Mb boundary to be our shared IO memory with the RSX.
+    void *host_addr = memalign(1024 * 1024, 1024 * 1024);
     assert(host_addr != NULL);
 
     // Initilise Reality, which sets up the command buffer and shared IO memory
-    rsxInit(&devdata->_CommandBuffer, 0x10000, 1024*1024, host_addr);
+    rsxInit(&devdata->_CommandBuffer, 0x10000, 1024 * 1024, host_addr);
     assert(devdata->_CommandBuffer != NULL);
 }
 
 int
-PSL1GHT_CreateWindow(_THIS, SDL_Window * window)
+PSL1GHT_CreateWindow(_THIS, SDL_Window *window)
 {
     SDL_WindowData *wdata;
 
     /* Allocate window internal data */
-    wdata = (SDL_WindowData *) SDL_calloc(1, sizeof(SDL_WindowData));
+    wdata = (SDL_WindowData *)SDL_calloc(1, sizeof(SDL_WindowData));
     if (wdata == NULL) {
         return SDL_OutOfMemory();
     }
@@ -136,58 +135,69 @@ PSL1GHT_CreateWindow(_THIS, SDL_Window * window)
 }
 
 int
-PSL1GHT_CreateWindowFrom(_THIS, SDL_Window * window, const void *data)
+PSL1GHT_CreateWindowFrom(_THIS, SDL_Window *window, const void *data)
 {
     return SDL_Unsupported();
 }
 
 void
-PSL1GHT_SetWindowTitle(_THIS, SDL_Window * window)
+PSL1GHT_SetWindowTitle(_THIS, SDL_Window *window)
 {
 }
+
 void
-PSL1GHT_SetWindowIcon(_THIS, SDL_Window * window, SDL_Surface * icon)
+PSL1GHT_SetWindowIcon(_THIS, SDL_Window *window, SDL_Surface *icon)
 {
 }
+
 void
-PSL1GHT_SetWindowPosition(_THIS, SDL_Window * window)
+PSL1GHT_SetWindowPosition(_THIS, SDL_Window *window)
 {
 }
+
 void
-PSL1GHT_SetWindowSize(_THIS, SDL_Window * window)
+PSL1GHT_SetWindowSize(_THIS, SDL_Window *window)
 {
 }
+
 void
-PSL1GHT_ShowWindow(_THIS, SDL_Window * window)
+PSL1GHT_ShowWindow(_THIS, SDL_Window *window)
 {
 }
+
 void
-PSL1GHT_HideWindow(_THIS, SDL_Window * window)
+PSL1GHT_HideWindow(_THIS, SDL_Window *window)
 {
 }
+
 void
-PSL1GHT_RaiseWindow(_THIS, SDL_Window * window)
+PSL1GHT_RaiseWindow(_THIS, SDL_Window *window)
 {
 }
+
 void
-PSL1GHT_MaximizeWindow(_THIS, SDL_Window * window)
+PSL1GHT_MaximizeWindow(_THIS, SDL_Window *window)
 {
 }
+
 void
-PSL1GHT_MinimizeWindow(_THIS, SDL_Window * window)
+PSL1GHT_MinimizeWindow(_THIS, SDL_Window *window)
 {
 }
+
 void
-PSL1GHT_RestoreWindow(_THIS, SDL_Window * window)
+PSL1GHT_RestoreWindow(_THIS, SDL_Window *window)
 {
 }
+
 void
-PSL1GHT_SetWindowGrab(_THIS, SDL_Window * window, SDL_bool grabbed)
+PSL1GHT_SetWindowGrab(_THIS, SDL_Window *window, SDL_bool grabbed)
 {
 
 }
+
 void
-PSL1GHT_DestroyWindow(_THIS, SDL_Window * window)
+PSL1GHT_DestroyWindow(_THIS, SDL_Window *window)
 {
 }
 
@@ -195,9 +205,11 @@ SDL_bool PSL1GHT_HasScreenKeyboardSupport(_THIS)
 {
     return SDL_FALSE;
 }
+
 void PSL1GHT_ShowScreenKeyboard(_THIS, SDL_Window *window)
 {
 }
+
 void PSL1GHT_HideScreenKeyboard(_THIS, SDL_Window *window)
 {
 }
@@ -214,7 +226,7 @@ PSL1GHT_CreateDevice(int devindex)
     deprintf (1, "PSL1GHT_CreateDevice( %16X)\n", devindex);
 
     /* Initialize all variables that we clean on shutdown */
-    device = (SDL_VideoDevice *) SDL_calloc(1, sizeof(SDL_VideoDevice));
+    device = (SDL_VideoDevice *)SDL_calloc(1, sizeof(SDL_VideoDevice));
     if (device) {
         SDL_memset(device, 0, (sizeof *device));
     }

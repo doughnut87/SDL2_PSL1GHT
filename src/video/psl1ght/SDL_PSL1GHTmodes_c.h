@@ -25,10 +25,9 @@
 #define _SDL_psl1ghtmodes_h
 
 extern void PSL1GHT_InitModes(_THIS);
-extern void PSL1GHT_GetDisplayModes(_THIS, SDL_VideoDisplay * display);
-extern int PSL1GHT_SetDisplayMode(_THIS, SDL_VideoDisplay * display, SDL_DisplayMode * mode);
+extern void PSL1GHT_GetDisplayModes(_THIS, SDL_VideoDisplay *display);
+extern int PSL1GHT_SetDisplayMode(_THIS, SDL_VideoDisplay *display, SDL_DisplayMode *mode);
 extern void PSL1GHT_QuitModes(_THIS);
-
 
 #endif /* SDL_psl1ghtmodes_h */
 

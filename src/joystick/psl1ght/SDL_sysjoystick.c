@@ -38,12 +38,12 @@
 
 typedef struct SDL_PSL1GHT_JoyData
 {
-	char name[NAMESIZE];
+    char name[NAMESIZE];
 } SDL_PSL1GHT_JoyData;
 
 struct joystick_hwdata
 {
-	padData old_pad_data;
+    padData old_pad_data;
 };
 
 static SDL_PSL1GHT_JoyData joy_data[MAX_PADS];
@@ -59,26 +59,24 @@ void SDL_SYS_JoystickDetect(void);
 int
 SDL_SYS_JoystickInit(void)
 {
-	int iReturn = 0;
+    int iReturn = 0;
     numberOfJoysticks = MAX_PADS;
 
-	pdprintf("SDL_SYS_JoystickInit\n");
+    pdprintf("SDL_SYS_JoystickInit\n");
 
-	SDL_zero( joy_data);
+    SDL_zero( joy_data);
 
-	if( iReturn == 0)
-	{
-		iReturn =  ioPadInit( MAX_PADS) ;
-		pdprintf("\tPad initialized\n");
-		if( iReturn != 0)
-		{
-			SDL_SetError("SDL_SYS_JoystickInit() : Couldn't initialize PS3 pads");
-		}
-	}
-	
-	SDL_SYS_JoystickDetect();
+    if (iReturn == 0) {
+        iReturn = ioPadInit( MAX_PADS);
+        pdprintf("\tPad initialized\n");
+        if (iReturn != 0) {
+            SDL_SetError("SDL_SYS_JoystickInit() : Couldn't initialize PS3 pads");
+        }
+    }
 
-	return numberOfJoysticks;	
+    SDL_SYS_JoystickDetect();
+
+    return numberOfJoysticks;
 }
 
 int
@@ -90,39 +88,34 @@ SDL_SYS_JoystickGetCount(void)
 void
 SDL_SYS_JoystickDetect(void)
 {
-	padInfo padinfo;
+    padInfo padinfo;
 
-	int iReturn = ioPadGetInfo(&padinfo);
-	//pdprintf("\tGot info\n");
-	if( iReturn != 0)
-	{
-		SDL_SetError("SDL_SYS_JoystickInit() : Couldn't get PS3 pads information ");
-	}
+    int iReturn = ioPadGetInfo(&padinfo);
+    if (iReturn != 0) {
+        SDL_SetError("SDL_SYS_JoystickInit() : Couldn't get PS3 pads information ");
+    }
 
-	if( iReturn == 0)
-	{
-		unsigned int i;
-		numberOfJoysticks = padinfo.connected;
+    if (iReturn == 0) {
+        unsigned int i;
+        numberOfJoysticks = padinfo.connected;
 
-		for(i = 0; i < padinfo.connected; i++)
-		{
-			if( padinfo.status[i])
-			{
-				sprintf( joy_data[i].name, "PAD%02X", i);
-			}
-		} 
-	}
+        for (i = 0; i < padinfo.connected; i++) {
+            if (padinfo.status[i]) {
+                sprintf(joy_data[i].name, "PAD%02X", i);
+            }
+        }
+    }
 }
 
 /* Function to get the device-dependent name of a joystick */
 const char *
 SDL_SYS_JoystickGetDeviceName(int device_index)
 {
-	char * name = NULL;
-	if (device_index < numberOfJoysticks)
-		name = "PS1LIGHT Controller";
-	else
-		SDL_SetError("No joystick available with that index");
+    char * name = NULL;
+    if (device_index < numberOfJoysticks)
+        name = "PS1LIGHT Controller";
+    else
+        SDL_SetError("No joystick available with that index");
     return name;
 }
 
@@ -136,7 +129,6 @@ SDL_SYS_JoystickGetDevicePlayerIndex(int device_index)
 void
 SDL_SYS_JoystickSetDevicePlayerIndex(int device_index, int player_index)
 {
-	
 }
 
 SDL_JoystickID
@@ -169,10 +161,10 @@ SDL_SYS_JoystickOpen(SDL_Joystick * joystick, int device_index)
         return -1;
     }
 
-	joystick->naxes = 4;
-	joystick->nhats = 0;
-	joystick->nballs = 0;
-	joystick->nbuttons = 16;
+    joystick->naxes = 4;
+    joystick->nhats = 0;
+    joystick->nballs = 0;
+    joystick->nbuttons = 16;
 
     return 0;
 }
@@ -183,20 +175,20 @@ SDL_SYS_JoystickRumble(SDL_Joystick * joystick, Uint16 low_frequency_rumble, Uin
     return SDL_Unsupported();
 }
 
-#define CheckPSL1GHTAxis( btn, bnum) \
-	if( new_pad_data.btn != joystick->hwdata->old_pad_data.btn) {\
-		SDL_PrivateJoystickAxis( joystick, (bnum), ((new_pad_data.btn-0x80)<<8)|new_pad_data.btn); \
-	} \
-	joystick->hwdata->old_pad_data.btn = new_pad_data.btn;
+#define CheckPSL1GHTAxis(btn, bnum) \
+    if (new_pad_data.btn != joystick->hwdata->old_pad_data.btn) {\
+        SDL_PrivateJoystickAxis( joystick, (bnum), ((new_pad_data.btn-0x80) << 8) | new_pad_data.btn); \
+    } \
+    joystick->hwdata->old_pad_data.btn = new_pad_data.btn;
 
-#define CheckPSL1GHTButton( btn, bnum) \
-	if( new_pad_data.btn != joystick->hwdata->old_pad_data.btn) {\
-		if( new_pad_data.btn == 0) \
-		SDL_PrivateJoystickButton( joystick, (bnum), SDL_RELEASED); \
-		else \
-		SDL_PrivateJoystickButton( joystick, (bnum), SDL_PRESSED); \
-	} \
-	joystick->hwdata->old_pad_data.btn = new_pad_data.btn;
+#define CheckPSL1GHTButton(btn, bnum) \
+    if (new_pad_data.btn != joystick->hwdata->old_pad_data.btn) { \
+        if (new_pad_data.btn == 0) \
+            SDL_PrivateJoystickButton( joystick, (bnum), SDL_RELEASED); \
+        else \
+            SDL_PrivateJoystickButton( joystick, (bnum), SDL_PRESSED); \
+    } \
+    joystick->hwdata->old_pad_data.btn = new_pad_data.btn;
 
 
 /* Function to update the state of a joystick - called as a device poll.
@@ -205,51 +197,49 @@ SDL_SYS_JoystickRumble(SDL_Joystick * joystick, Uint16 low_frequency_rumble, Uin
  * and update joystick device state.
  */
 void
-SDL_SYS_JoystickUpdate(SDL_Joystick * joystick)
+SDL_SYS_JoystickUpdate(SDL_Joystick *joystick)
 {
-	padData new_pad_data;
-	int joystickIndex = SDL_JoystickGetDeviceIndexFromInstanceID(joystick->instance_id);
-	
-	if (ioPadGetData(joystickIndex, &new_pad_data) != 0)
-	{
-		SDL_SetError("No joystick available with that index");
-	}
-	else if(new_pad_data.len >= 8)
-	{
-		// Update axes
-		CheckPSL1GHTAxis( ANA_L_H, 0);
-		CheckPSL1GHTAxis( ANA_L_V, 1);
-		CheckPSL1GHTAxis( ANA_R_H, 2);
-		CheckPSL1GHTAxis( ANA_R_V, 3);
-		
-		// Update buttons
-		CheckPSL1GHTButton( BTN_LEFT, 0);
-		CheckPSL1GHTButton( BTN_DOWN, 1);
-		CheckPSL1GHTButton( BTN_RIGHT, 2);
-		CheckPSL1GHTButton( BTN_UP, 3);
+    padData new_pad_data;
+    int joystickIndex = SDL_JoystickGetDeviceIndexFromInstanceID(joystick->instance_id);
 
-		CheckPSL1GHTButton( BTN_START, 4);
-		CheckPSL1GHTButton( BTN_R3, 5);
-		CheckPSL1GHTButton( BTN_L3, 6);
-		CheckPSL1GHTButton( BTN_SELECT, 7);
+    if (ioPadGetData(joystickIndex, &new_pad_data) != 0)
+    {
+        SDL_SetError("No joystick available with that index");
+    }
+    else if (new_pad_data.len >= 8)
+    {
+        // Update axes
+        CheckPSL1GHTAxis(ANA_L_H, 0);
+        CheckPSL1GHTAxis(ANA_L_V, 1);
+        CheckPSL1GHTAxis(ANA_R_H, 2);
+        CheckPSL1GHTAxis(ANA_R_V, 3);
 
-		CheckPSL1GHTButton( BTN_SQUARE, 8);
-		CheckPSL1GHTButton( BTN_CROSS, 9);
-		CheckPSL1GHTButton( BTN_CIRCLE, 10);
-		CheckPSL1GHTButton( BTN_TRIANGLE, 11);
+        // Update buttons
+        CheckPSL1GHTButton(BTN_LEFT, 0);
+        CheckPSL1GHTButton(BTN_DOWN, 1);
+        CheckPSL1GHTButton(BTN_RIGHT, 2);
+        CheckPSL1GHTButton(BTN_UP, 3);
 
-		CheckPSL1GHTButton( BTN_R1, 12);
-		CheckPSL1GHTButton( BTN_L1, 13);
-		CheckPSL1GHTButton( BTN_R2, 14);
-		CheckPSL1GHTButton( BTN_L2, 15);
-	}
+        CheckPSL1GHTButton(BTN_START, 4);
+        CheckPSL1GHTButton(BTN_R3, 5);
+        CheckPSL1GHTButton(BTN_L3, 6);
+        CheckPSL1GHTButton(BTN_SELECT, 7);
 
-    return;
+        CheckPSL1GHTButton(BTN_SQUARE, 8);
+        CheckPSL1GHTButton(BTN_CROSS, 9);
+        CheckPSL1GHTButton(BTN_CIRCLE, 10);
+        CheckPSL1GHTButton(BTN_TRIANGLE, 11);
+
+        CheckPSL1GHTButton(BTN_R1, 12);
+        CheckPSL1GHTButton(BTN_L1, 13);
+        CheckPSL1GHTButton(BTN_R2, 14);
+        CheckPSL1GHTButton(BTN_L2, 15);
+    }
 }
 
 /* Function to close a joystick after use */
 void
-SDL_SYS_JoystickClose(SDL_Joystick * joystick)
+SDL_SYS_JoystickClose(SDL_Joystick *joystick)
 {
     if (joystick->hwdata)
         SDL_free(joystick->hwdata);
@@ -265,7 +255,7 @@ SDL_SYS_JoystickQuit(void)
 static SDL_bool
 SDL_SYS_JoystickGetGamepadMapping(int device_index, SDL_GamepadMapping *out)
 {
-	return SDL_FALSE;
+    return SDL_FALSE;
 }
 
 SDL_JoystickDriver SDL_PSL1GHT_JoystickDriver =

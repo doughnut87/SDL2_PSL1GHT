@@ -46,7 +46,7 @@ PSL1GHT_InitModes(_THIS)
     assert(state.state == 0); // Make sure display is enabled
 
     // Get the current resolution
-	videoResolution res;
+    videoResolution res;
     assert(videoGetResolution(state.displayMode.resolution, &res) == 0);
 
     /* Setting up the DisplayMode based on current settings */
@@ -63,11 +63,11 @@ PSL1GHT_InitModes(_THIS)
     /* Setup the display to it's  default mode */
     assert(videoConfigure(0, &modedata->vconfig, NULL, 1) == 0);
 
-	// Wait until RSX is ready
-	do{
-		SDL_Delay(10);
-		assert( videoGetState(0, 0, &state) == 0);
-	}while ( state.state == 3);
+    // Wait until RSX is ready
+    do {
+        SDL_Delay(10);
+        assert( videoGetState(0, 0, &state) == 0);
+    } while (state.state == 3);
 
     /* Set display's videomode and add it */
     SDL_AddBasicVideoDisplay(&mode);
@@ -86,35 +86,35 @@ static SDL_DisplayMode ps3fb_modedb[] = {
 
 /* PS3 videomode number according to ps3fb_modedb */
 static PSL1GHT_DisplayModeData ps3fb_data[] = {
-	// { resolution, format, aspect, padding, pitch }
-	{{
-		VIDEO_RESOLUTION_1080, 
-		VIDEO_BUFFER_FORMAT_XRGB,
-		VIDEO_ASPECT_16_9, 
-		{0, 0, 0, 0, 0, 0, 0, 0, 0},
-		1920 * 4
-	}},
-	{{
-		VIDEO_RESOLUTION_720, 
-		VIDEO_BUFFER_FORMAT_XRGB,
-		VIDEO_ASPECT_16_9, 
-		{0, 0, 0, 0, 0, 0, 0, 0, 0},
-		1280 * 4
-	}},
-	{{
-		VIDEO_RESOLUTION_480, 
-		VIDEO_BUFFER_FORMAT_XRGB,
-		VIDEO_ASPECT_16_9, 
-		{0, 0, 0, 0, 0, 0, 0, 0, 0},
-		720 * 4
-	}},
-	{{
-		VIDEO_RESOLUTION_576, 
-		VIDEO_BUFFER_FORMAT_XRGB,
-		VIDEO_ASPECT_16_9, 
-		{0, 0, 0, 0, 0, 0, 0, 0, 0},
-		720 * 4
-	}},
+    // { resolution, format, aspect, padding, pitch }
+    {{
+        VIDEO_RESOLUTION_1080,
+        VIDEO_BUFFER_FORMAT_XRGB,
+        VIDEO_ASPECT_16_9,
+        {0, 0, 0, 0, 0, 0, 0, 0, 0},
+        1920 * 4
+    }},
+    {{
+        VIDEO_RESOLUTION_720,
+        VIDEO_BUFFER_FORMAT_XRGB,
+        VIDEO_ASPECT_16_9,
+        {0, 0, 0, 0, 0, 0, 0, 0, 0},
+        1280 * 4
+    }},
+    {{
+        VIDEO_RESOLUTION_480,
+        VIDEO_BUFFER_FORMAT_XRGB,
+        VIDEO_ASPECT_16_9,
+        {0, 0, 0, 0, 0, 0, 0, 0, 0},
+        720 * 4
+    }},
+    {{
+        VIDEO_RESOLUTION_576,
+        VIDEO_BUFFER_FORMAT_XRGB,
+        VIDEO_ASPECT_16_9,
+        {0, 0, 0, 0, 0, 0, 0, 0, 0},
+        720 * 4
+    }},
 };
 
 void
@@ -126,7 +126,7 @@ PSL1GHT_GetDisplayModes(_THIS, SDL_VideoDisplay * display)
     nummodes = sizeof(ps3fb_modedb) / sizeof(SDL_DisplayMode);
 
     int n;
-    for (n=0; n<nummodes; ++n) {
+    for (n = 0; n < nummodes; ++n) {
         /* Get driver specific mode data */
         ps3fb_modedb[n].driverdata = &ps3fb_data[n];
 
@@ -141,23 +141,23 @@ int
 PSL1GHT_SetDisplayMode(_THIS, SDL_VideoDisplay * display, SDL_DisplayMode * mode)
 {
     deprintf(1, "+PSL1GHT_SetDisplayMode()\n");
-    PSL1GHT_DisplayModeData *dispdata = (PSL1GHT_DisplayModeData *) mode->driverdata;
-	videoState state;
+    PSL1GHT_DisplayModeData *dispdata = (PSL1GHT_DisplayModeData *)mode->driverdata;
+    videoState state;
 
     /* Set the new DisplayMode */
     deprintf(2, "Setting PS3_MODE to %u\n", dispdata->vconfig.resolution);
     if ( videoConfigure(0, &dispdata->vconfig, NULL, 0) != 0)
-	{
+    {
         deprintf(2, "Could not set PS3FB_MODE\n");
         SDL_SetError("Could not set PS3FB_MODE\n");
         return -1;
     }
 
-	// Wait until RSX is ready
-	do{
-		SDL_Delay(10);
-		assert( videoGetState(0, 0, &state) == 0);
-	}while ( state.state == 3);
+    // Wait until RSX is ready
+    do{
+        SDL_Delay(10);
+        assert(videoGetState(0, 0, &state) == 0);
+    } while (state.state == 3);
 
     deprintf(1, "-PSL1GHT_SetDisplayMode()\n");
     return 0;

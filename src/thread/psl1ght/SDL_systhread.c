@@ -33,13 +33,12 @@
 #include "../SDL_thread_c.h"
 #include "../SDL_systhread.h"
 
-
 static int sig_list[] = {
     SIGHUP, SIGINT, SIGQUIT, SIGPIPE, SIGALRM, SIGTERM, SIGWINCH, 0
 };
 
 void
-SDL_MaskSignals(sigset_t * omask)
+SDL_MaskSignals(sigset_t *omask)
 {
     sigset_t mask;
     int i;
@@ -48,14 +47,14 @@ SDL_MaskSignals(sigset_t * omask)
     for (i = 0; sig_list[i]; ++i) {
         sigaddset(&mask, sig_list[i]);
     }
-	// FIXME as soom as signal are implemented in PSL1GHT
-//    sigprocmask(SIG_BLOCK, &mask, omask);
+    // FIXME as soom as signal are implemented in PSL1GHT
+    //sigprocmask(SIG_BLOCK, &mask, omask);
 }
 
 void
-SDL_UnmaskSignals(sigset_t * omask)
+SDL_UnmaskSignals(sigset_t *omask)
 {
-	// FIXME as soom as signal are implemented in PSL1GHT
+    // FIXME as soom as signal are implemented in PSL1GHT
     //sigprocmask(SIG_SETMASK, omask, NULL);
 }
 
@@ -63,27 +62,27 @@ static void
 RunThread(void *thread)
 {
     SDL_RunThread(thread);
-	sysThreadExit(0);
+    sysThreadExit(0);
 }
 
 int
-SDL_SYS_CreateThread(SDL_Thread * thread)
+SDL_SYS_CreateThread(SDL_Thread *thread)
 {
-	sys_ppu_thread_t id;
-	size_t stack_size = 0x4000;
-	u64 priority = 1500;
+    sys_ppu_thread_t id;
+    size_t stack_size = 0x4000;
+    u64 priority = 1500;
 
     /* Create the thread and go! */
-	int s = sysThreadCreate(&id, RunThread, thread, priority, stack_size, THREAD_JOINABLE, "SDL");
+    int s = sysThreadCreate(&id, RunThread, thread, priority, stack_size, THREAD_JOINABLE, "SDL");
     thread->handle = id;
 
-    if ( s != 0)
-	{
+    if (s != 0)
+    {
         SDL_SetError("Not enough resources to create thread");
-        return (-1);
+        return -1;
     }
     //resume_thread(thread->handle);
-    return (0);
+    return 0;
 }
 
 void
@@ -96,15 +95,15 @@ SDL_SYS_SetupThread(const char *name)
 SDL_threadID
 SDL_ThreadID(void)
 {
-	sys_ppu_thread_t id;
-	sysThreadGetId(&id);
-    return ((SDL_threadID) id);
+    sys_ppu_thread_t id;
+    sysThreadGetId(&id);
+    return (SDL_threadID)id;
 }
 
 void
 SDL_SYS_WaitThread(SDL_Thread * thread)
 {
-	u64 retval;
+    u64 retval;
 
     sysThreadJoin(thread->handle, &retval);
 }
@@ -132,7 +131,6 @@ int SDL_SYS_SetThreadPriority(SDL_ThreadPriority priority)
     sysThreadGetId(&id);
 
     return sysThreadGetPriority(id, &value);
-
 }
 
 /* vi: set ts=4 sw=4 expandtab: */
