@@ -277,9 +277,9 @@ PSL1GHT_CreateTexture(SDL_Renderer *renderer, SDL_Texture *texture)
         SDL_CreateRGBSurfaceFrom(pixels, texture->w, texture->h, bpp, pitch,
                             Rmask, Gmask, Bmask, Amask);
 
-    SDL_SetSurfaceColorMod(texture->driverdata, texture->r, texture->g,
-                           texture->b);
-    SDL_SetSurfaceAlphaMod(texture->driverdata, texture->a);
+    SDL_SetSurfaceColorMod(texture->driverdata, texture->color.r,
+                           texture->color.g, texture->color.b);
+    SDL_SetSurfaceAlphaMod(texture->driverdata, texture->color.a);
     SDL_SetSurfaceBlendMode(texture->driverdata, texture->blendMode);
 
     if (!texture->driverdata) {
@@ -398,7 +398,8 @@ PSL1GHT_RenderClear(SDL_Renderer * renderer)
     }
 
     color = SDL_MapRGBA(surface->format,
-                        renderer->r, renderer->g, renderer->b, renderer->a);
+                        renderer->color.r, renderer->color.g,
+                        renderer->color.b, renderer->color.a);
 
     /* By definition the clear ignores the clip rect */
     clip_rect = surface->clip_rect;
@@ -453,15 +454,15 @@ PSL1GHT_RenderDrawPoints(SDL_Renderer *renderer, const SDL_Point *points,
     /* Draw the points! */
     if (renderer->blendMode == SDL_BLENDMODE_NONE) {
         Uint32 color = SDL_MapRGBA(surface->format,
-                                   renderer->r, renderer->g, renderer->b,
-                                   renderer->a);
+                                   renderer->color.r, renderer->color.g, renderer->color.b,
+                                   renderer->color.a);
 
         status = SDL_DrawPoints(surface, points, count, color);
     } else {
         status = SDL_BlendPoints(surface, points, count,
                                 renderer->blendMode,
-                                renderer->r, renderer->g, renderer->b,
-                                renderer->a);
+                                renderer->color.r, renderer->color.g, renderer->color.b,
+                                renderer->color.a);
     }
 
     if (temp) {
@@ -498,15 +499,15 @@ PSL1GHT_RenderDrawLines(SDL_Renderer *renderer, const SDL_Point *points,
     /* Draw the lines! */
     if (renderer->blendMode == SDL_BLENDMODE_NONE) {
         Uint32 color = SDL_MapRGBA(surface->format,
-                                   renderer->r, renderer->g, renderer->b,
-                                   renderer->a);
+                                   renderer->color.r, renderer->color.g, renderer->color.b,
+                                   renderer->color.a);
 
         status = SDL_DrawLines(surface, points, count, color);
     } else {
         status = SDL_BlendLines(surface, points, count,
                                 renderer->blendMode,
-                                renderer->r, renderer->g, renderer->b,
-                                renderer->a);
+                                renderer->color.r, renderer->color.g, renderer->color.b,
+                                renderer->color.a);
     }
 
     if (temp) {
@@ -566,14 +567,14 @@ PSL1GHT_RenderFillRects(SDL_Renderer *renderer, const SDL_Rect *rects, int count
 
     if (renderer->blendMode == SDL_BLENDMODE_NONE) {
         Uint32 color = SDL_MapRGBA(surface->format,
-                                   renderer->r, renderer->g, renderer->b,
-                                   renderer->a);
+                                   renderer->color.r, renderer->color.g, renderer->color.b,
+                                   renderer->color.a);
         status = SDL_FillRects(surface, rects, count, color);
     } else {
         status = SDL_BlendFillRects(surface, rects, count,
                                     renderer->blendMode,
-                                    renderer->r, renderer->g, renderer->b,
-                                    renderer->a);
+                                    renderer->color.r, renderer->color.g, renderer->color.b,
+                                    renderer->color.a);
     }
 
     if (temp) {
@@ -728,6 +729,10 @@ PSL1GHT_RunCommandQueue(SDL_Renderer *renderer, SDL_RenderCommand *cmd, void *ve
             }
 
             case SDL_RENDERCMD_COPY_EX: {
+                break;
+            }
+
+            case SDL_RENDERCMD_GEOMETRY: {
                 break;
             }
 

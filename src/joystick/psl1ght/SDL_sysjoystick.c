@@ -181,10 +181,10 @@ SDL_SYS_JoystickRumbleTriggers(SDL_Joystick *joystick, Uint16 left_rumble, Uint1
     return SDL_Unsupported();
 }
 
-static SDL_bool
-SDL_SYS_JoystickHasLED(SDL_Joystick *joystick)
+static Uint32
+SDL_SYS_JoystickGetCapabilities(SDL_Joystick *joystick)
 {
-    return SDL_FALSE;
+    return 0;
 }
 
 static int
@@ -301,7 +301,7 @@ SDL_JoystickDriver SDL_PSL1GHT_JoystickDriver =
     SDL_SYS_JoystickOpen,
     SDL_SYS_JoystickRumble,
     SDL_SYS_JoystickRumbleTriggers,
-    SDL_SYS_JoystickHasLED,
+    SDL_SYS_JoystickGetCapabilities,
     SDL_SYS_JoystickSetLED,
     SDL_SYS_JoystickSendEffect,
     SDL_SYS_JoystickSetSensorsEnabled,
