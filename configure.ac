@@ -2300,7 +2300,7 @@ AS_HELP_STRING([--enable-video-dummy], [use dummy video driver [[default=yes]]])
     fi
 }
 
-dnl Set up the Null video driver.
+dnl Set up the PSL1GHT video driver.
 CheckPSL1GHTVideo()
 {
     AC_ARG_ENABLE(video-psl1ght,
@@ -4081,7 +4081,6 @@ AS_HELP_STRING([--enable-render-d3d], [enable the Direct3D render driver [[defau
         EXTRA_CFLAGS="$EXTRA_CFLAGS -I\"$PSL1GHT/ppu/include\" -mcpu=cell "
         EXTRA_LDFLAGS="$EXTRA_LDFLAGS -lgcm_sys -lrsx -lsysutil -lio -laudio -lrt -llv2"
         CheckPSL1GHTVideo
-        #CheckDummyAudio
         #CheckPSL1GHTGL
 
         # Set up files for the thread library
