@@ -381,8 +381,8 @@ PSL1GHT_UpdateViewport(SDL_Renderer *renderer)
         renderer->viewport.y += (surface->h - renderer->window->h)/2;
     }
 
-    SDL_SetClipRect(data->screens[0], &renderer->viewport);
-    SDL_SetClipRect(data->screens[1], &renderer->viewport);
+    SDL_SetClipRect(data->screens[0], (const SDL_Rect *)&renderer->viewport);
+    SDL_SetClipRect(data->screens[1], (const SDL_Rect *)&renderer->viewport);
     return 0;
 }
 
@@ -405,7 +405,7 @@ PSL1GHT_RenderClear(SDL_Renderer * renderer)
     clip_rect = surface->clip_rect;
     SDL_SetClipRect(surface, NULL);
     SDL_FillRect(surface, NULL, color);
-    SDL_SetClipRect(surface, &clip_rect);
+    SDL_SetClipRect(surface, (const SDL_Rect *)&clip_rect);
     return 0;
 }
 
