@@ -42,9 +42,9 @@
 #endif
 
 static int
-PSL1GHT_AUD_OpenDevice(_THIS, void *handle, const char *devname, int iscapture)
+PSL1GHT_AUD_OpenDevice(_THIS, const char *devname)
 {
-    deprintf( "PSL1GHT_AUD_OpenDevice(%08X.%08X, %s, %d)\n", SHW64(this), devname, iscapture);
+    deprintf( "PSL1GHT_AUD_OpenDevice(%08X.%08X, %s)\n", SHW64(this), devname);
     SDL_AudioFormat test_format = SDL_FirstAudioFormat(this->spec.format);
     int valid_datatype = 0;
 
@@ -119,13 +119,13 @@ PSL1GHT_AUD_OpenDevice(_THIS, void *handle, const char *devname, int iscapture)
 
     return ret == 0;
 }
-
+/*
 static void
 PSL1GHT_AUD_PlayDevice(_THIS)
 {
     deprintf( "PSL1GHT_AUD_PlayDevice(%08X.%08X)\n", SHW64(this));
 
-/*
+
     while( _config.readIndex == _last_filled_buf) // FIXME this is a mess to remove when queued event will me integrated
     {
         deprintf( "\tplaying too fast... waiting a ms\n");
@@ -136,8 +136,8 @@ PSL1GHT_AUD_PlayDevice(_THIS)
         SDL_OutOfMemory();
     }
 
-    playGenericSound(this->hidden->mixbuf, this->hidden->mixlen);*/
-}
+    playGenericSound(this->hidden->mixbuf, this->hidden->mixlen);
+}*/
 
 static void
 PSL1GHT_AUD_CloseDevice(_THIS)
@@ -188,7 +188,7 @@ PSL1GHT_WaitDevice(_THIS)
 }
 
 
-static int
+static SDL_bool
 PSL1GHT_AUD_Init(SDL_AudioDriverImpl * impl)
 {
     deprintf( "PSL1GHT_AUD_Init(%08X.%08X)\n", SHW64(impl));
@@ -202,7 +202,7 @@ PSL1GHT_AUD_Init(SDL_AudioDriverImpl * impl)
     /* and the capabilities */
     impl->OnlyHasDefaultOutputDevice = 1;
 
-    return 1;   /* this audio target is available. */
+    return SDL_TRUE;   /* this audio target is available. */
 }
 
 AudioBootStrap PSL1GHTAUDIO_bootstrap = {

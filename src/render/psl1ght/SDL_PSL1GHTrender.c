@@ -74,7 +74,8 @@ static int PSL1GHT_RenderCopy(SDL_Renderer *renderer, SDL_Texture *texture,
                          const SDL_Rect *srcrect, const SDL_Rect *dstrect);
 static int PSL1GHT_QueueCopyEx(SDL_Renderer *renderer, SDL_RenderCommand *cmd, SDL_Texture *texture,
                 const SDL_Rect *srcquad, const SDL_FRect *dstrect,
-                const double angle, const SDL_FPoint *center, const SDL_RendererFlip flip);
+                const double angle, const SDL_FPoint *center, const SDL_RendererFlip flip,
+                float scale_x, float scale_y);
 static int PSL1GHT_RunCommandQueue(SDL_Renderer *renderer, SDL_RenderCommand *cmd, void *vertices, size_t vertsize);
 static int PSL1GHT_RenderReadPixels(SDL_Renderer *renderer, const SDL_Rect *rect,
                                Uint32 format, void *pixels, int pitch);
@@ -667,7 +668,8 @@ PSL1GHT_RenderCopy(SDL_Renderer *renderer, SDL_Texture *texture,
 static int
 PSL1GHT_QueueCopyEx(SDL_Renderer *renderer, SDL_RenderCommand *cmd, SDL_Texture *texture,
                 const SDL_Rect *srcquad, const SDL_FRect *dstrect,
-                const double angle, const SDL_FPoint *center, const SDL_RendererFlip flip)
+                const double angle, const SDL_FPoint *center, const SDL_RendererFlip flip,
+                float scale_x, float scale_y)
 {
     return 0;
 }
