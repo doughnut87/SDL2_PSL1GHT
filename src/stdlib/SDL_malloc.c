@@ -1260,7 +1260,7 @@ extern void *sbrk(ptrdiff_t);
 #      define _SC_PAGE_SIZE _SC_PAGESIZE
 #    endif
 #  endif
-#  if defined(_SC_PAGE_SIZE) && defined(HAVE_SYSCONF)
+#  if defined(_SC_PAGE_SIZE) && defined(HAVE_SYSCONF) // PSL1GHT
 #    define malloc_getpagesize sysconf(_SC_PAGE_SIZE)
 #  else
 #    if defined(BSD) || defined(DGUX) || defined(HAVE_GETPAGESIZE)
