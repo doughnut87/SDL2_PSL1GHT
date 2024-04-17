@@ -90,7 +90,7 @@ static void updateKeymap(_THIS)
             keymap[scancode] = unicode;
         }
     }
-    SDL_SetKeymap(0, keymap, SDL_NUM_SCANCODES);
+    SDL_SetKeymap(0, keymap, SDL_NUM_SCANCODES, SDL_FALSE);
 }
 
 static void checkKeyboardConnected(_THIS)

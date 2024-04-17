@@ -47,16 +47,16 @@ struct joystick_hwdata
 };
 
 static SDL_PSL1GHT_JoyData joy_data[MAX_PADS];
-int numberOfJoysticks = 0;
+static int numberOfJoysticks = 0;
 
-void SDL_SYS_JoystickDetect(void);
+static void SDL_SYS_JoystickDetect(void);
 
 /* Function to scan the system for joysticks.
  * This function should set numberOfJoysticks to the number of available
  * joysticks.  Joystick 0 should be the system default joystick.
  * It should return 0, or -1 on an unrecoverable fatal error.
  */
-int
+static int
 SDL_SYS_JoystickInit(void)
 {
     int iReturn = 0;
@@ -64,7 +64,7 @@ SDL_SYS_JoystickInit(void)
 
     pdprintf("SDL_SYS_JoystickInit\n");
 
-    SDL_zero( joy_data);
+    SDL_zero(joy_data);
 
     if (iReturn == 0) {
         iReturn = ioPadInit( MAX_PADS);
@@ -79,13 +79,13 @@ SDL_SYS_JoystickInit(void)
     return numberOfJoysticks;
 }
 
-int
+static int
 SDL_SYS_JoystickGetCount(void)
 {
     return numberOfJoysticks;
 }
 
-void
+static void
 SDL_SYS_JoystickDetect(void)
 {
     padInfo padinfo;
@@ -108,7 +108,7 @@ SDL_SYS_JoystickDetect(void)
 }
 
 /* Function to get the device-dependent name of a joystick */
-const char *
+static const char *
 SDL_SYS_JoystickGetDeviceName(int device_index)
 {
     char * name = NULL;
@@ -119,32 +119,38 @@ SDL_SYS_JoystickGetDeviceName(int device_index)
     return name;
 }
 
-/* Function to perform the mapping from device index to the instance id for this index */
-SDL_JoystickID
+static const char *
+SDL_SYS_JoystickGetDevicePath(int device_index)
+{
+    return NULL;
+}
+
+/* Function to get the player index of a joystick */
+static int
 SDL_SYS_JoystickGetDevicePlayerIndex(int device_index)
 {
     return device_index;
 }
 
-void
+static void
 SDL_SYS_JoystickSetDevicePlayerIndex(int device_index, int player_index)
 {
 }
 
-SDL_JoystickID
+static SDL_JoystickID
 SDL_SYS_JoystickGetDeviceInstanceID(int device_index)
 {
     return device_index;
 }
 
-SDL_JoystickGUID
+static SDL_JoystickGUID
 SDL_SYS_JoystickGetDeviceGUID(int device_index)
 {
     SDL_JoystickGUID guid;
     /* the GUID is just the first 16 chars of the name for now */
-    const char *name = SDL_SYS_JoystickGetDeviceName( device_index );
-    SDL_zero( guid );
-    SDL_memcpy( &guid, name, SDL_min( sizeof(guid), SDL_strlen( name ) ) );
+    const char *name = SDL_SYS_JoystickGetDeviceName(device_index);
+    SDL_zero(guid);
+    SDL_memcpy(&guid, name, SDL_min(sizeof(guid), SDL_strlen(name)));
     return guid;
 }
 
@@ -214,9 +220,9 @@ SDL_SYS_JoystickSendEffect(SDL_Joystick *joystick, const void *data, int size)
 #define CheckPSL1GHTButton(btn, bnum) \
     if (new_pad_data.btn != joystick->hwdata->old_pad_data.btn) { \
         if (new_pad_data.btn == 0) \
-            SDL_PrivateJoystickButton( joystick, (bnum), SDL_RELEASED); \
+            SDL_PrivateJoystickButton(joystick, (bnum), SDL_RELEASED); \
         else \
-            SDL_PrivateJoystickButton( joystick, (bnum), SDL_PRESSED); \
+            SDL_PrivateJoystickButton(joystick, (bnum), SDL_PRESSED); \
     } \
     joystick->hwdata->old_pad_data.btn = new_pad_data.btn;
 
@@ -294,6 +300,7 @@ SDL_JoystickDriver SDL_PSL1GHT_JoystickDriver =
     SDL_SYS_JoystickGetCount,
     SDL_SYS_JoystickDetect,
     SDL_SYS_JoystickGetDeviceName,
+    SDL_SYS_JoystickGetDevicePath,
     SDL_SYS_JoystickGetDevicePlayerIndex,
     SDL_SYS_JoystickSetDevicePlayerIndex,
     SDL_SYS_JoystickGetDeviceGUID,

@@ -208,10 +208,10 @@ SDL_bool PSL1GHT_IsScreenKeyboardShown(_THIS, SDL_Window *window)
 }
 
 static SDL_VideoDevice *
-PSL1GHT_CreateDevice(int devindex)
+PSL1GHT_CreateDevice(void)
 {
     SDL_VideoDevice *device;
-    deprintf (1, "PSL1GHT_CreateDevice( %16X)\n", devindex);
+    deprintf (1, "PSL1GHT_CreateDevice()\n");
 
     /* Initialize all variables that we clean on shutdown */
     device = (SDL_VideoDevice *)SDL_calloc(1, sizeof(SDL_VideoDevice));
