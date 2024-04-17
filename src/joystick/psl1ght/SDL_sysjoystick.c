@@ -125,6 +125,12 @@ SDL_SYS_JoystickGetDevicePath(int device_index)
     return NULL;
 }
 
+static int
+SDL_SYS_JoystickGetDeviceSteamVirtualGamepadSlot(int device_index)
+{
+    return device_index;
+}
+
 /* Function to get the player index of a joystick */
 static int
 SDL_SYS_JoystickGetDevicePlayerIndex(int device_index)
@@ -298,6 +304,7 @@ SDL_JoystickDriver SDL_PSL1GHT_JoystickDriver =
     SDL_SYS_JoystickDetect,
     SDL_SYS_JoystickGetDeviceName,
     SDL_SYS_JoystickGetDevicePath,
+    SDL_SYS_JoystickGetDeviceSteamVirtualGamepadSlot,
     SDL_SYS_JoystickGetDevicePlayerIndex,
     SDL_SYS_JoystickSetDevicePlayerIndex,
     SDL_SYS_JoystickGetDeviceGUID,
