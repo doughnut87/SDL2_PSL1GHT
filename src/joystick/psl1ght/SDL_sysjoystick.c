@@ -146,12 +146,9 @@ SDL_SYS_JoystickGetDeviceInstanceID(int device_index)
 static SDL_JoystickGUID
 SDL_SYS_JoystickGetDeviceGUID(int device_index)
 {
-    SDL_JoystickGUID guid;
-    /* the GUID is just the first 16 chars of the name for now */
+    /* the GUID is just the name for now */
     const char *name = SDL_SYS_JoystickGetDeviceName(device_index);
-    SDL_zero(guid);
-    SDL_memcpy(&guid, name, SDL_min(sizeof(guid), SDL_strlen(name)));
-    return guid;
+    return SDL_CreateJoystickGUIDForName(name);
 }
 
 /* Function to open a joystick for use.

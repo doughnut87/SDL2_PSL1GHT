@@ -79,7 +79,7 @@ static int PSL1GHT_QueueCopyEx(SDL_Renderer *renderer, SDL_RenderCommand *cmd, S
 static int PSL1GHT_RunCommandQueue(SDL_Renderer *renderer, SDL_RenderCommand *cmd, void *vertices, size_t vertsize);
 static int PSL1GHT_RenderReadPixels(SDL_Renderer *renderer, const SDL_Rect *rect,
                                Uint32 format, void *pixels, int pitch);
-static void PSL1GHT_RenderPresent(SDL_Renderer *renderer);
+static int PSL1GHT_RenderPresent(SDL_Renderer *renderer);
 static void PSL1GHT_DestroyTexture(SDL_Renderer *renderer, SDL_Texture *texture);
 static void PSL1GHT_DestroyRenderer(SDL_Renderer *renderer);
 
@@ -785,7 +785,7 @@ PSL1GHT_RenderReadPixels(SDL_Renderer *renderer, const SDL_Rect *rect,
                              format, pixels, pitch);
 }
 
-static void
+static int
 PSL1GHT_RenderPresent(SDL_Renderer * renderer)
 {
     PSL1GHT_RenderData *data = (PSL1GHT_RenderData *) renderer->driverdata;
@@ -806,6 +806,7 @@ PSL1GHT_RenderPresent(SDL_Renderer * renderer)
 
     // Update the flipping chain, if any
     data->current_screen = (data->current_screen + 1) % 2;
+    return 0;
 }
 
 static void

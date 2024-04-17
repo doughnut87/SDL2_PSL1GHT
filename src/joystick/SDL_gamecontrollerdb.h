@@ -980,8 +980,8 @@ static const char *s_ControllerMappings [] =
 #if SDL_JOYSTICK_EMSCRIPTEN
     "default,Standard Gamepad,a:b0,b:b1,back:b8,dpdown:b13,dpleft:b14,dpright:b15,dpup:b12,guide:b16,leftshoulder:b4,leftstick:b10,lefttrigger:b6,leftx:a0,lefty:a1,rightshoulder:b5,rightstick:b11,righttrigger:b7,rightx:a2,righty:a3,start:b9,x:b2,y:b3,",
 #endif
-#if defined(SDL_JOYSTICK_PSL1GHT)
-    "5053314c4947485420436f6e74726f6c,PS1LIGHT Controller,a:b9,b:b10,back:b7,dpdown:b1,dpleft:b0,dpright:b2,dpup:b3,leftshoulder:b13,leftstick:b6,lefttrigger:b15,leftx:a0,lefty:a1,rightshoulder:b12,rightstick:b5,righttrigger:b14,rightx:a2,righty:a3,start:b4,x:b8,y:b11,",
+#if SDL_JOYSTICK_PSL1GHT
+    "000000005053314c4947485420436f00,PS1LIGHT Controller,a:b9,b:b10,back:b7,dpdown:b1,dpleft:b0,dpright:b2,dpup:b3,leftshoulder:b13,leftstick:b6,lefttrigger:b15,leftx:a0,lefty:a1,rightshoulder:b12,rightstick:b5,righttrigger:b14,rightx:a2,righty:a3,start:b4,x:b8,y:b11,",
 #endif
 #if SDL_JOYSTICK_PS2
     "0000000050533220436f6e74726f6c00,PS2 Controller,crc:ed87,a:b14,b:b13,back:b0,dpdown:b6,dpleft:b7,dpright:b5,dpup:b4,leftshoulder:b10,leftstick:b1,lefttrigger:b8,leftx:a0,lefty:a1,rightshoulder:b11,rightstick:b2,righttrigger:b9,rightx:a2,righty:a3,start:b3,x:b15,y:b12,",
