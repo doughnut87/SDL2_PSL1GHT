@@ -25,7 +25,7 @@
 #include "../SDL_sysvideo.h"
 #include "SDL_timer.h"
 
-#include <sysutil/video.h>
+#include <sysutil/video_out.h>
 
 #include <assert.h>
 
@@ -35,19 +35,19 @@ PSL1GHT_InitModes(_THIS)
     deprintf(1, "+PSL1GHT_InitModes()\n");
     SDL_DisplayMode mode;
     PSL1GHT_DisplayModeData *modedata;
-    videoState state;
+    videoOutState state;
 
     modedata = (PSL1GHT_DisplayModeData *) SDL_malloc(sizeof(*modedata));
     if (!modedata) {
         return;
     }
 
-    assert(videoGetState(0, 0, &state) == 0); // Get the state of the display
+    assert(videoOutGetState(0, 0, &state) == 0); // Get the state of the display
     assert(state.state == 0); // Make sure display is enabled
 
     // Get the current resolution
-    videoResolution res;
-    assert(videoGetResolution(state.displayMode.resolution, &res) == 0);
+    videoOutResolution res;
+    assert(videoOutGetResolution(state.displayMode.resolution, &res) == 0);
 
     /* Setting up the DisplayMode based on current settings */
     mode.format = SDL_PIXELFORMAT_ARGB8888;
@@ -56,17 +56,17 @@ PSL1GHT_InitModes(_THIS)
     mode.h = res.height;
 
     modedata->vconfig.resolution = state.displayMode.resolution;
-    modedata->vconfig.format = VIDEO_BUFFER_FORMAT_XRGB;
+    modedata->vconfig.format = VIDEO_OUT_BUFFER_FORMAT_XRGB;
     modedata->vconfig.pitch = res.width * 4;
     mode.driverdata = modedata;
 
     /* Setup the display to it's  default mode */
-    assert(videoConfigure(0, &modedata->vconfig, NULL, 1) == 0);
+    assert(videoOutConfigure(0, &modedata->vconfig, NULL, 1) == 0);
 
     // Wait until RSX is ready
     do {
         SDL_Delay(10);
-        assert( videoGetState(0, 0, &state) == 0);
+        assert( videoOutGetState(0, 0, &state) == 0);
     } while (state.state == 3);
 
     /* Set display's videomode and add it */
@@ -88,30 +88,30 @@ static SDL_DisplayMode ps3fb_modedb[] = {
 static PSL1GHT_DisplayModeData ps3fb_data[] = {
     // { resolution, format, aspect, padding, pitch }
     {{
-        VIDEO_RESOLUTION_1080,
-        VIDEO_BUFFER_FORMAT_XRGB,
-        VIDEO_ASPECT_16_9,
+        VIDEO_OUT_RESOLUTION_1080,
+        VIDEO_OUT_BUFFER_FORMAT_XRGB,
+        VIDEO_OUT_ASPECT_16_9,
         {0, 0, 0, 0, 0, 0, 0, 0, 0},
         1920 * 4
     }},
     {{
-        VIDEO_RESOLUTION_720,
-        VIDEO_BUFFER_FORMAT_XRGB,
-        VIDEO_ASPECT_16_9,
+        VIDEO_OUT_RESOLUTION_720,
+        VIDEO_OUT_BUFFER_FORMAT_XRGB,
+        VIDEO_OUT_ASPECT_16_9,
         {0, 0, 0, 0, 0, 0, 0, 0, 0},
         1280 * 4
     }},
     {{
-        VIDEO_RESOLUTION_480,
-        VIDEO_BUFFER_FORMAT_XRGB,
-        VIDEO_ASPECT_16_9,
+        VIDEO_OUT_RESOLUTION_480,
+        VIDEO_OUT_BUFFER_FORMAT_XRGB,
+        VIDEO_OUT_ASPECT_16_9,
         {0, 0, 0, 0, 0, 0, 0, 0, 0},
         720 * 4
     }},
     {{
-        VIDEO_RESOLUTION_576,
-        VIDEO_BUFFER_FORMAT_XRGB,
-        VIDEO_ASPECT_16_9,
+        VIDEO_OUT_RESOLUTION_576,
+        VIDEO_OUT_BUFFER_FORMAT_XRGB,
+        VIDEO_OUT_ASPECT_16_9,
         {0, 0, 0, 0, 0, 0, 0, 0, 0},
         720 * 4
     }},
@@ -142,11 +142,11 @@ PSL1GHT_SetDisplayMode(_THIS, SDL_VideoDisplay * display, SDL_DisplayMode * mode
 {
     deprintf(1, "+PSL1GHT_SetDisplayMode()\n");
     PSL1GHT_DisplayModeData *dispdata = (PSL1GHT_DisplayModeData *)mode->driverdata;
-    videoState state;
+    videoOutState state;
 
     /* Set the new DisplayMode */
     deprintf(2, "Setting PS3_MODE to %u\n", dispdata->vconfig.resolution);
-    if ( videoConfigure(0, &dispdata->vconfig, NULL, 0) != 0)
+    if ( videoOutConfigure(0, &dispdata->vconfig, NULL, 0) != 0)
     {
         deprintf(2, "Could not set PS3FB_MODE\n");
         SDL_SetError("Could not set PS3FB_MODE\n");
@@ -156,7 +156,7 @@ PSL1GHT_SetDisplayMode(_THIS, SDL_VideoDisplay * display, SDL_DisplayMode * mode
     // Wait until RSX is ready
     do{
         SDL_Delay(10);
-        assert(videoGetState(0, 0, &state) == 0);
+        assert(videoOutGetState(0, 0, &state) == 0);
     } while (state.state == 3);
 
     deprintf(1, "-PSL1GHT_SetDisplayMode()\n");
