@@ -181,7 +181,33 @@ SDL_SYS_JoystickOpen(SDL_Joystick * joystick, int device_index)
 static int
 SDL_SYS_JoystickRumble(SDL_Joystick * joystick, Uint16 low_frequency_rumble, Uint16 high_frequency_rumble)
 {
-    return SDL_Unsupported();
+    if (!joystick || joystick->instance_id < 0) {
+        return SDL_SetError("Invalid joystick for rumble");
+    }
+
+    int joystickIndex = SDL_JoystickGetDeviceIndexFromInstanceID(joystick->instance_id);
+
+    padActParam act;
+    // Map SDL rumble values to PS3 pad
+    // offset by 1 for non zero values to ensure rumble is felt and not lost due to loss of resolution.
+    unsigned char smallBleed = (high_frequency_rumble == 0) ? 0 : (1 + (high_frequency_rumble >> 10)); // 0-63 bleed into bigmotor
+    act.small_motor = (smallBleed >= 48) ? 1 : 0; // turn on small motor if value high enough
+    act.large_motor   = (low_frequency_rumble == 0) ? 0 : (1 + (low_frequency_rumble >> 8)); // 0–255
+    // clamp for overflow
+    if (act.large_motor == 0 && low_frequency_rumble != 0)
+        act.large_motor = 255;
+    // bleed into big motor
+    if (smallBleed > act.large_motor /*&& act.small_motor == 0*/)
+    {
+        act.large_motor = smallBleed;
+    } 
+
+    int ret = ioPadSetActDirect(joystickIndex, &act);
+    if (ret != 0) {
+        return SDL_SetError("ioPadSetActDirect failed (%d)", ret);
+    }
+
+    return 0;
 }
 
 static int
